@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Clima en Vivo Argentina | Radar, Pronóstico y Temperatura Hoy</title>
+
+<meta name="description" content="Consulta el clima en todas las ciudades de Argentina con radar animado, gráficos y pronóstico actualizado en tiempo real.">
+
+<meta name="keywords" content="clima argentina, clima hoy, radar clima, pronóstico argentina, temperatura ahora">
+
+<meta name="robots" content="index, follow">
+
+<link rel="canonical" href="https://tudominio.com">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;900&display=swap" rel="stylesheet">
+
+
+<style>
+
+body{
+
+margin:0;
+font-family:Poppins;
+color:white;
+text-align:center;
+
+background:linear-gradient(-45deg,#00ffd5,#0088ff,#ff00cc,#00ff88);
+
+background-size:400% 400%;
+
+animation:bg 15s infinite;
+
+}
+
+@keyframes bg{
+
+0%{background-position:0%}
+50%{background-position:100%}
+100%{background-position:0%}
+
+}
+
+header{
+
+padding:30px;
+
+}
+
+h1{
+
+font-size:40px;
+
+}
+
+.grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+
+gap:15px;
+
+padding:20px;
+
+}
+
+.city{
+
+background:white;
+
+color:black;
+
+padding:15px;
+
+border-radius:15px;
+
+cursor:pointer;
+
+transition:0.3s;
+
+font-weight:bold;
+
+}
+
+.city:hover{
+
+transform:scale(1.1);
+
+}
+
+#resultado{
+
+font-size:28px;
+
+margin:20px;
+
+}
+
+canvas{
+
+background:white;
+
+border-radius:15px;
+
+margin:20px;
+
+max-width:90%;
+
+}
+
+iframe{
+
+border-radius:20px;
+
+margin:20px;
+
+max-width:95%;
+
+}
+
+.btn{
+
+display:inline-block;
+
+padding:15px 40px;
+
+background:#00ff88;
+
+color:black;
+
+border-radius:50px;
+
+text-decoration:none;
+
+font-weight:bold;
+
+margin:20px;
+
+box-shadow:0 0 20px #00ff88;
+
+}
+
+footer{
+
+padding:30px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>CLIMA EN ARGENTINA EN VIVO</h1>
+
+<p>Radar, gráficos y pronóstico en tiempo real</p>
+
+</header>
+
+
+<div class="grid" id="cities"></div>
+
+
+<div id="resultado">
+
+Selecciona una ciudad
+
+</div>
+
+
+<canvas id="chart"></canvas>
+
+
+<iframe
+
+id="radar"
+
+width="800"
+
+height="400"
+
+src="https://embed.windy.com/embed2.html?lat=-34.61&lon=-58.38&zoom=5&overlay=radar">
+
+</iframe>
+
+
+<a href="https://hotm.io/BOf16J"
+
+target="_blank"
+
+class="btn">
+
+Crear Agencia IA y Ganar Dinero
+
+</a>
+
+
+<footer>
+
+Clima Argentina en Vivo
+
+</footer>
+
+
+<script>
+
+
+const ciudades=[
+
+["Buenos Aires",-34.61,-58.38],
+
+["Córdoba",-31.42,-64.18],
+
+["Rosario",-32.95,-60.66],
+
+["Mendoza",-32.89,-68.84],
+
+["La Plata",-34.92,-57.95],
+
+["Mar del Plata",-38,-57.55],
+
+["Salta",-24.78,-65.41],
+
+["San Juan",-31.53,-68.52],
+
+["Neuquén",-38.95,-68.06],
+
+["Tucumán",-26.83,-65.22]
+
+];
+
+
+const grid=document.getElementById("cities");
+
+
+ciudades.forEach(c=>{
+
+grid.innerHTML+=`
+
+<div class="city"
+
+onclick="clima('${c[0]}',${c[1]},${c[2]})">
+
+${c[0]}
+
+</div>
+
+`;
+
+});
+
+
+let chart;
+
+
+function clima(nombre,lat,lon){
+
+
+fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m&current_weather=true`)
+
+.then(r=>r.json())
+
+.then(data=>{
+
+
+document.getElementById("resultado").innerHTML=`
+
+${nombre}<br>
+
+🌡 ${data.current_weather.temperature} °C
+
+`;
+
+
+document.getElementById("radar").src=
+
+`https://embed.windy.com/embed2.html?lat=${lat}&lon=${lon}&zoom=6&overlay=radar`;
+
+
+let temps=data.hourly.temperature_2m.slice(0,12);
+
+let horas=data.hourly.time.slice(0,12);
+
+
+if(chart) chart.destroy();
+
+
+chart=new Chart(document.getElementById("chart"),{
+
+type:"line",
+
+data:{
+
+labels:horas,
+
+datasets:[{
+
+label:"Temperatura",
+
+data:temps
+
+}]
+
+}
+
+});
+
+
+});
+
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
