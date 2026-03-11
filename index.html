@@ -237,7 +237,89 @@ const ciudades=[
 
 ];
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Botón Nube</title>
 
+<style>
+
+body{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  background:#87CEEB;
+  font-family:Arial;
+}
+
+/* nube */
+.cloud{
+  position:relative;
+  background:white;
+  padding:25px 60px;
+  border-radius:100px;
+  text-decoration:none;
+  color:#333;
+  font-size:22px;
+  font-weight:bold;
+  box-shadow:0 10px 20px rgba(0,0,0,0.15);
+  animation:float 3s ease-in-out infinite;
+  display:inline-block;
+  text-align:center;
+  min-width:220px;
+}
+
+/* partes de la nube */
+
+.cloud:before,
+.cloud:after{
+  content:"";
+  position:absolute;
+  background:white;
+  border-radius:50%;
+}
+
+.cloud:before{
+  width:70px;
+  height:70px;
+  top:-30px;
+  left:25px;
+}
+
+.cloud:after{
+  width:90px;
+  height:90px;
+  top:-40px;
+  right:25px;
+}
+
+/* hover */
+
+.cloud:hover{
+  transform:scale(1.08);
+}
+
+/* animación */
+
+@keyframes float{
+  0%{ transform:translateY(0px); }
+  50%{ transform:translateY(-10px); }
+  100%{ transform:translateY(0px); }
+}
+
+</style>
+</head>
+
+<body>
+
+<a class="cloud" href="https://www.amazon.com/-/es/Anker-Estaci%C3%B3n-port%C3%A1til-generador-completa/dp/B0FN7MSY4L?crid=2W549CP590J9D&linkCode=ll2&tag=venusreviews-20" target="_blank">
+Comprar ahora
+</a>
+
+</body>
+</html>
 const grid=document.getElementById("cities");
 
 
@@ -326,4 +408,5 @@ data:temps
 </body>
 
 </html>
+
 
